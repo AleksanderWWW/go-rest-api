@@ -1,0 +1,3 @@
+dev:
+	go fmt ./...
+	go run httpd/main.go
