@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"github.com/gin-gonic/gin"
+
+	"github.com/AleksanderWWW/go-rest-api/httpd/handler"
+)
 
 func main() {
-	fmt.Println("Hello there")
+	r := gin.Default()
+
+	r.GET("/status", handler.StatusGet())
+
+	r.Run()
 }
