@@ -1,4 +1,4 @@
-module github.com/AleksanderWWW/go-rest-api
+module github.com/AleksanderWWW/tokenizer-api
 
 go 1.19
 

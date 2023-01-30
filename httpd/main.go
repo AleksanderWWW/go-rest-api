@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/AleksanderWWW/go-rest-api/httpd/handler"
+	"github.com/AleksanderWWW/tokenizer-api/httpd/handler"
 )
 
 func main() {
