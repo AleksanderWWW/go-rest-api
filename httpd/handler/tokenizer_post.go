@@ -10,22 +10,24 @@ import (
 )
 
 type tokenizerRequest struct {
-	Text  string `json:"text"`
-	Model string `json:"model"`
+	Text           string `json:"text"`
+	Model          string `json:"model"`
+	AddPrefixSpace bool   `json:"addPrefixSpace"`
+	TrimOffsets    bool   `json:"trimOffsets"`
 }
 
 type model interface {
 	EncodeSingle(input string, addSpecialTokensOpt ...bool) (*tokenizer.Encoding, error)
 }
 
-func getModelSwitch(model_string string) model {
+func getModelSwitch(model_string string, addPrefixSpace bool, trimOffsets bool) model {
 	switch model_string {
 	case "bert":
 		return pretrained.BertBaseUncased()
 	case "gpt2":
-		return pretrained.GPT2(true, true)
+		return pretrained.GPT2(trimOffsets, trimOffsets)
 	case "roberta":
-		return pretrained.RobertaBase(true, true)
+		return pretrained.RobertaBase(trimOffsets, trimOffsets)
 	default:
 		return nil
 	}
@@ -36,7 +38,7 @@ func TokenizerPost() gin.HandlerFunc {
 		requestBody := tokenizerRequest{}
 		c.Bind(&requestBody)
 
-		tk := getModelSwitch(requestBody.Model)
+		tk := getModelSwitch(requestBody.Model, requestBody.AddPrefixSpace, requestBody.TrimOffsets)
 
 		en, err := tk.EncodeSingle(requestBody.Text)
 		if err != nil {
@@ -44,9 +46,11 @@ func TokenizerPost() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, map[string]interface{}{
-			"text":   requestBody.Text,
-			"model":  requestBody.Model,
-			"tokens": en.Tokens,
+			"text":           requestBody.Text,
+			"model":          requestBody.Model,
+			"addPrefixSpace": requestBody.AddPrefixSpace,
+			"trimOffsets":    requestBody.TrimOffsets,
+			"tokens":         en.Tokens,
 		})
 	}
 }
