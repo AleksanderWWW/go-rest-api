@@ -10,6 +10,7 @@ func main() {
 	r := gin.Default()
 
 	r.GET("/status", handler.StatusGet())
+	r.POST("/tokenize", handler.TokenizerPost())
 
 	r.Run()
 }
