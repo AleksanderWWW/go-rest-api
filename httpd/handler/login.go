@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 	"time"
 
@@ -43,15 +42,15 @@ func Login() gin.HandlerFunc {
 		tokenString, err := token.SignedString([]byte("56743985498282154984553094"))
 
 		if err != nil {
-			log.Fatal(err)
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": "failed to create token",
 			})
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{
-			"token": tokenString,
-		})
+		c.SetSameSite(http.SameSiteLaxMode)
+		c.SetCookie("Authorization", tokenString, 3600, "", "", false, true)
+
+		c.JSON(http.StatusOK, gin.H{})
 	}
 }
