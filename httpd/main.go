@@ -11,6 +11,7 @@ func main() {
 
 	r.GET("/status", handler.StatusGet())
 	r.POST("/tokenize", handler.TokenizerPost())
+	r.POST("/login", handler.Login())
 
 	r.Run()
 }
