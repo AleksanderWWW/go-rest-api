@@ -3,16 +3,28 @@ package middleware
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 )
 
-func RequireAuth(c *gin.Context) {
-	tokenString, err := c.Cookie("Authorization")
+type authHeader struct {
+	IDToken string `header:"Authorization"`
+}
 
-	if err != nil {
+func RequireAuth(c *gin.Context) {
+	h := authHeader{}
+
+	c.ShouldBindHeader(&h)
+
+	tokenStringRaw := h.IDToken
+
+	tokenString := strings.Split(tokenStringRaw, "Bearer ")[1]
+
+
+	if tokenString == "" {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
 
@@ -22,6 +34,10 @@ func RequireAuth(c *gin.Context) {
 		}
 		return []byte("56743985498282154984553094"), nil
 	})
+
+	if err != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
