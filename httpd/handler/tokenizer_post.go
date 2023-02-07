@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -22,6 +23,13 @@ func TokenizerPost() gin.HandlerFunc {
 		c.Bind(&requestBody)
 
 		tk := tokenizer.GetModelSwitch(requestBody.Model, requestBody.AddPrefixSpace, requestBody.TrimOffsets)
+
+		if tk == nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": fmt.Sprintf("unrecognized model: %s", requestBody.Model),
+			})
+			return
+		}
 
 		en, err := tk.EncodeSingle(requestBody.Text)
 		if err != nil {
