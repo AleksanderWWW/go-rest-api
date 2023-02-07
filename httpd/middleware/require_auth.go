@@ -23,7 +23,6 @@ func RequireAuth(c *gin.Context) {
 
 	tokenString := strings.Split(tokenStringRaw, "Bearer ")[1]
 
-
 	if tokenString == "" {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
