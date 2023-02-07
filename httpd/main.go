@@ -13,6 +13,7 @@ func main() {
 	r.GET("/status", handler.StatusGet())
 	r.POST("/tokenize", middleware.RequireAuth, handler.TokenizerPost())
 	r.POST("/login", handler.Login())
+	r.POST("/signup", handler.SignUp())
 
 	r.Run()
 }
