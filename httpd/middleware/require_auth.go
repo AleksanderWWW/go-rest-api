@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -31,7 +32,7 @@ func RequireAuth(c *gin.Context) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", t.Header)
 		}
-		return []byte("56743985498282154984553094"), nil
+		return []byte(os.Getenv("KEY")), nil
 	})
 
 	if err != nil {

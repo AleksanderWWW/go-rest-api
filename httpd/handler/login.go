@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -39,7 +40,7 @@ func Login() gin.HandlerFunc {
 			},
 		)
 		// to be replaced with env var
-		tokenString, err := token.SignedString([]byte("56743985498282154984553094"))
+		tokenString, err := token.SignedString([]byte(os.Getenv("KEY")))
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
