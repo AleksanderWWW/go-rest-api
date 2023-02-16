@@ -5,11 +5,11 @@ import (
 	"github.com/sugarme/tokenizer/pretrained"
 )
 
-type model interface {
+type Model interface {
 	EncodeSingle(input string, addSpecialTokensOpt ...bool) (*tokenizer.Encoding, error)
 }
 
-func GetModelSwitch(model_string string, addPrefixSpace bool, trimOffsets bool) model {
+func GetModelSwitch(model_string string, addPrefixSpace bool, trimOffsets bool) Model {
 	switch model_string {
 	case "bert":
 		return pretrained.BertBaseUncased()
