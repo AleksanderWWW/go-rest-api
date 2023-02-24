@@ -3,9 +3,9 @@ package tokenizer
 import "testing"
 
 func TestGetModelSwitch(t *testing.T) {
-	model_name := "some_unknown_model"
+	modelName := "some_unknown_model"
 
-	model := GetModelSwitch(model_name, true, true)
+	model := GetModelSwitch(modelName, true, true)
 
 	if model != nil {
 		t.Errorf("FAILED: Expected nil, got %d", model)
@@ -14,9 +14,9 @@ func TestGetModelSwitch(t *testing.T) {
 	}
 
 	// check if correct model implements Model interface
-	model_name = "bert"
+	modelName = "bert"
 
-	model = GetModelSwitch(model_name, true, true)
+	model = GetModelSwitch(modelName, true, true)
 
 	var i interface{} = model
 	_, ok := i.(Model)
