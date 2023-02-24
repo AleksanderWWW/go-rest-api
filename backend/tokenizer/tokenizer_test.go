@@ -27,4 +27,17 @@ func TestGetModelSwitch(t *testing.T) {
 		t.Log("PASSED")
 	}
 
+	// check if all correct models return non-nil values
+	modelNames := []string{
+		"bert", "gpt2", "roberta",
+	}
+
+	for _, modelName := range modelNames {
+		model = GetModelSwitch(modelName, true, true)
+		if model == nil {
+			t.Errorf("FAILED: Model named %s returned nil", modelName)
+		}
+	}
+	t.Log("PASSED")
+
 }
