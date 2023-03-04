@@ -16,7 +16,8 @@ func SignUp() gin.HandlerFunc {
 
 		c.Bind(&body)
 
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
+		//hashedPassword
+		_, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -27,8 +28,8 @@ func SignUp() gin.HandlerFunc {
 		// store username and hash of the password in a db
 		// for now just echo the vaules
 		c.JSON(http.StatusOK, gin.H{
-			"email":    body.Email,
-			"password": hashedPassword,
+			"email":  body.Email,
+			"status": "success",
 		})
 	}
 }

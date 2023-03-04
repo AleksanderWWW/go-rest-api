@@ -6,14 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gin-gonic/gin"
 	"github.com/go-playground/assert"
 )
-
-func SetUpRouter() *gin.Engine {
-	router := gin.Default()
-	return router
-}
 
 func TestStatus(t *testing.T) {
 	mockResponse := `{"status":"ok"}`
