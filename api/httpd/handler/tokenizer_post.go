@@ -22,9 +22,9 @@ func TokenizerPost() gin.HandlerFunc {
 		requestBody := tokenizerRequest{}
 		c.Bind(&requestBody)
 
-		tk := tokenizer.GetModelSwitch(requestBody.Model, requestBody.AddPrefixSpace, requestBody.TrimOffsets)
+		tk, err := tokenizer.GetModelSwitch(requestBody.Model, requestBody.AddPrefixSpace, requestBody.TrimOffsets)
 
-		if tk == nil {
+		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": fmt.Sprintf("unrecognized model: %s", requestBody.Model),
 			})

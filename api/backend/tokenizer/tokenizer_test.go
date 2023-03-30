@@ -5,7 +5,7 @@ import "testing"
 func TestGetModelSwitch(t *testing.T) {
 	modelName := "some_unknown_model"
 
-	model := GetModelSwitch(modelName, true, true)
+	model, _ := GetModelSwitch(modelName, true, true)
 
 	if model != nil {
 		t.Errorf("FAILED: Expected nil, got %d", model)
@@ -16,7 +16,11 @@ func TestGetModelSwitch(t *testing.T) {
 	// check if correct model implements Model interface
 	modelName = "bert"
 
-	model = GetModelSwitch(modelName, true, true)
+	model, err := GetModelSwitch(modelName, true, true)
+
+	if err != nil {
+		t.Error(err)
+	}
 
 	var i interface{} = model
 	_, ok := i.(Model)
@@ -33,7 +37,7 @@ func TestGetModelSwitch(t *testing.T) {
 	}
 
 	for _, modelName := range modelNames {
-		model = GetModelSwitch(modelName, true, true)
+		model, _ = GetModelSwitch(modelName, true, true)
 		if model == nil {
 			t.Errorf("FAILED: Model named %s returned nil", modelName)
 		}
