@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"testing"
 
@@ -16,7 +15,7 @@ func TestCreateUser(t *testing.T) {
 		t.Error("No .env file found")
 	}
 	uri := os.Getenv("MONGODB_URI")
-	fmt.Println(uri)
+
 	if uri == "" {
 		t.Error("You must set your 'MONGODB_URI' environmental variable. See\n\t https://www.mongodb.com/docs/drivers/go/current/usage-examples/#environment-variable")
 	}
