@@ -38,13 +38,14 @@ func SignUp(repo db.Repository) gin.HandlerFunc {
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error":  "could not sign up",
+				"error":  err.Error(),
 				"status": "failure",
 			})
+		} else {
+			c.JSON(http.StatusOK, gin.H{
+				"email":  body.Email,
+				"status": "success",
+			})
 		}
-		c.JSON(http.StatusOK, gin.H{
-			"email":  body.Email,
-			"status": "success",
-		})
 	}
 }
