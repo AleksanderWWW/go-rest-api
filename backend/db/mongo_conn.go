@@ -17,16 +17,16 @@ func (conn *MongoConnection) CreateUser(ctx context.Context, user User) error {
 	return err
 }
 
-func (conn *MongoConnection) GetUser(ctx context.Context, email string) (string, error) {
+func (conn *MongoConnection) GetUser(ctx context.Context, email string) (User, error) {
 	filter := bson.D{{Key: "email", Value: email}}
 	var user User
 	err := conn.collection.FindOne(context.TODO(), filter).Decode(&user)
 
 	if err != nil {
-		return "unsuccessful", err
+		return User{}, err
 	}
 
-	return "success", nil
+	return user, nil
 }
 
 func NewMongoConnection(collection mongo.Collection) MongoConnection {
