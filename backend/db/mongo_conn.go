@@ -6,6 +6,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type MongoConnection struct {
@@ -37,8 +38,19 @@ func (conn *MongoConnection) GetUser(ctx context.Context, email string) (User, e
 	return user, nil
 }
 
-func NewMongoConnection(collection mongo.Collection) MongoConnection {
+func NewMongoClient(uri string) mongo.Client {
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+
+	if err != nil {
+		panic(err)
+	}
+
+	return *client
+}
+
+func NewMongoConnection(client mongo.Client, dbName string, collectionName string) MongoConnection {
+	collection := client.Database(dbName).Collection(collectionName)
 	return MongoConnection{
-		collection: collection,
+		collection: *collection,
 	}
 }

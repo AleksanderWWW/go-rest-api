@@ -19,7 +19,7 @@ func TestCreateUser(t *testing.T) {
 			Password: "1234",
 		}
 
-		conn := NewMongoConnection(*mt.Coll)
+		conn := MongoConnection{*mt.Coll}
 
 		err := conn.CreateUser(context.TODO(), user)
 
