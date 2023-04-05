@@ -14,7 +14,7 @@ func TestSignup(t *testing.T) {
 	mockResponse := `{"email":"test@test.com","status":"success"}`
 
 	r := SetUpRouter()
-	r.POST("/signup", SignUp())
+	r.POST("/signup", SignUp(mockRepo{}))
 
 	reqData := []byte(`{"email":"test@test.com", "password": "password"}`)
 
