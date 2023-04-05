@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/AleksanderWWW/tokenizer-api/backend/db"
+	"github.com/AleksanderWWW/tokenizer-api/backend/utils"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func SignUp(repo db.Repository) gin.HandlerFunc {
@@ -19,7 +19,7 @@ func SignUp(repo db.Repository) gin.HandlerFunc {
 		c.Bind(&body)
 
 		//hashedPassword
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
+		hashedPassword, err := utils.HashPassword(body.Password)
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{

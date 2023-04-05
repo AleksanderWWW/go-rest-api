@@ -2,9 +2,9 @@ package handler
 
 import (
 	"context"
-	
-	"github.com/gin-gonic/gin"
+
 	"github.com/AleksanderWWW/tokenizer-api/backend/db"
+	"github.com/gin-gonic/gin"
 )
 
 func SetUpRouter() *gin.Engine {
@@ -12,7 +12,7 @@ func SetUpRouter() *gin.Engine {
 	return router
 }
 
-type mockRepo struct {}
+type mockRepo struct{}
 
 func (r mockRepo) CreateUser(ctx context.Context, user db.User) error {
 	return nil
@@ -20,7 +20,7 @@ func (r mockRepo) CreateUser(ctx context.Context, user db.User) error {
 
 func (r mockRepo) GetUser(ctx context.Context, id string) (db.User, error) {
 	return db.User{
-		Email:id,
+		Email:    id,
 		Password: "",
-		}, nil		
+	}, nil
 }

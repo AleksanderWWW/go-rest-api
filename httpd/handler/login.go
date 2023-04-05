@@ -1,15 +1,19 @@
 package handler
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/AleksanderWWW/tokenizer-api/backend/db"
+	"github.com/AleksanderWWW/tokenizer-api/backend/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 )
 
-func Login() gin.HandlerFunc {
+func Login(repo db.Repository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var body struct {
 			Email    string
@@ -23,9 +27,21 @@ func Login() gin.HandlerFunc {
 			return
 		}
 
-		// temporary for dev purposes
-		// will be replaced with DB calls
-		if body.Password != "1234" {
+		user, err := repo.GetUser(context.Background(), body.Email)
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "unknown user",
+			})
+			return
+		}
+
+		expectedHashedPassword := user.Password
+
+		fmt.Println(body)
+		fmt.Println(expectedHashedPassword)
+
+		if !utils.CheckPasswordHash(body.Password, expectedHashedPassword) {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": "wrong password",
 			})
