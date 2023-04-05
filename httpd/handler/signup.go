@@ -18,7 +18,6 @@ func SignUp(repo db.Repository) gin.HandlerFunc {
 
 		c.Bind(&body)
 
-		//hashedPassword
 		hashedPassword, err := utils.HashPassword(body.Password)
 
 		if err != nil {
@@ -32,8 +31,6 @@ func SignUp(repo db.Repository) gin.HandlerFunc {
 			Password: string(hashedPassword),
 		}
 
-		// store username and hash of the password in a db
-		// for now just echo the vaules
 		err = repo.CreateUser(context.Background(), user)
 
 		if err != nil {
