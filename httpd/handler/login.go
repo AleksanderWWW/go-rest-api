@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -37,9 +36,6 @@ func Login(repo db.Repository) gin.HandlerFunc {
 		}
 
 		expectedHashedPassword := user.Password
-
-		fmt.Println(body)
-		fmt.Println(expectedHashedPassword)
 
 		if !utils.CheckPasswordHash(body.Password, expectedHashedPassword) {
 			c.JSON(http.StatusBadRequest, gin.H{
