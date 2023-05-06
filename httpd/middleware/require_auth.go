@@ -15,17 +15,9 @@ type authHeader struct {
 	IDToken string `header:"Authorization"`
 }
 
-func RequireAuth(c *gin.Context) {
-	h := authHeader{}
-
-	c.ShouldBindHeader(&h)
-
-	tokenStringRaw := h.IDToken
-
-	tokenString := strings.Split(tokenStringRaw, "Bearer ")[1]
-
+func verifyToken(tokenString string) bool {
 	if tokenString == "" {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		return false
 	}
 
 	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
@@ -36,16 +28,31 @@ func RequireAuth(c *gin.Context) {
 	})
 
 	if err != nil {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		return false
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		fmt.Println(claims)
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
-			c.AbortWithStatus(http.StatusUnauthorized)
+			return false
 		}
 
 	} else {
+		return false
+	}
+
+	return true
+}
+
+func RequireAuth(c *gin.Context) {
+	h := authHeader{}
+
+	c.ShouldBindHeader(&h)
+
+	tokenStringRaw := h.IDToken
+
+	tokenString := strings.Split(tokenStringRaw, "Bearer ")[1]
+
+	if !verifyToken(tokenString) {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
 
